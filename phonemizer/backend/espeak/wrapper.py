@@ -76,6 +76,7 @@ class EspeakWrapper:
     # on the system. The user can choose an alternative espeak library with
     # the method EspeakWrapper.set_library().
     _ESPEAK_LIBRARY = None
+    _ESPEAK_DATA_PATH = None
 
     def __init__(self):
         # the following attributes are accessed through properties and are
@@ -85,7 +86,7 @@ class EspeakWrapper:
         self._voice = None
 
         # load the espeak API
-        self._espeak = EspeakAPI(self.library())
+        self._espeak = EspeakAPI(self.library(), self.data_path)
 
         # lazy loading of attributes only required for the synthetize method
         self._libc_ = None
@@ -144,6 +145,21 @@ class EspeakWrapper:
 
         """
         cls._ESPEAK_LIBRARY = library
+        
+    @classmethod
+    def set_data_path(cls, data_path: str):
+        """Sets the path for the data to be used by the espeak backend.
+
+        If this is not set, the backend uses the default data path from the system installation.
+
+        Parameters
+        ----------
+        data_path : str
+            The path to the data to be used by the espeak backend. Set `data_path` to None
+            to restore the default.
+
+        """
+        cls._ESPEAK_DATA_PATH = data_path
 
     @classmethod
     def library(cls):
@@ -207,8 +223,37 @@ class EspeakWrapper:
 
     @property
     def data_path(self):
-        """The espeak data directory as a pathlib.Path instance"""
-        if self._data_path is None:
+        """Returns the espeak library used as backend
+
+        The following precedence rule applies for library lookup:
+
+        1. As specified by BaseEspeakBackend.set_library()
+        2. Or as specified by the environment variable
+           PHONEMIZER_ESPEAK_LIBRARY
+        3. Or the default espeak library found on the system
+
+        Raises
+        ------
+        RuntimeError if the espeak library cannot be found or if the
+          environment variable PHONEMIZER_ESPEAK_LIBRARY is set to a
+          non-readable file
+
+        """
+        if self._ESPEAK_DATA_PATH:
+            data_path = pathlib.Path(self._ESPEAK_DATA_PATH)
+            if not (data_path.is_dir() and os.access(self._ESPEAK_DATA_PATH, os.R_OK)):
+                raise RuntimeError(f'{self._ESPEAK_DATA_PATH} is not a readable directory')
+            self._data_path = data_path.resolve()
+        elif 'PHONEMIZER_ESPEAK_DATA_PATH' in os.environ:
+            data_path = pathlib.Path(os.environ['PHONEMIZER_ESPEAK_DATA_PATH'])
+            if not (data_path.is_dir() and os.access(data_path, os.R_OK)):
+                raise RuntimeError(  # pragma: nocover
+                    f'PHONEMIZER_ESPEAK_DATA_PATH={data_path} '
+                    f'is not a readable directory')
+            self._data_path = data_path.resolve()
+        
+        # Fetch path dynamically after initialize
+        if self._data_path is None and hasattr(self, '_espeak'):
             self._fetch_version_and_path()
         return self._data_path
 
