@@ -22,7 +22,7 @@ packages = ["phonemizer"]
 
 [project]
 name = "phonemizer-fork"
-version = "3.3.1-beta.3"
+version = "3.3.1"
 description = "Simple text to phones converter for multiple languages"
 authors = [
     {name = "Mathieu Bernard", email = "mathieu.bernard.2@cnrs.fr"},
