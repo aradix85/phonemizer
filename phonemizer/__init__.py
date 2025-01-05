@@ -17,5 +17,5 @@
 from .phonemize import phonemize  # pylint: disable=unused-import
 import importlib.metadata
 
-__version__ = importlib.metadata.version(__name__)
+__version__ = importlib.metadata.version("phonemizer-fork")
 """Phonemizer version"""
