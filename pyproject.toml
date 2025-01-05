@@ -14,11 +14,15 @@
 # along with phonemizer. If not, see <http://www.gnu.org/licenses/>.
 
 [build-system]
-requires = ["setuptools >= 61.0"]
-build-backend = "setuptools.build_meta"
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["phonemizer"]
 
 [project]
 name = "phonemizer"
+version = "3.3.0"
 description = "Simple text to phones converter for multiple languages"
 authors = [
     {name = "Mathieu Bernard", email = "mathieu.bernard.2@cnrs.fr"},
@@ -38,7 +42,6 @@ classifiers = [
     "Operating System :: OS Independent"]
 
 requires-python = ">= 3.8"
-dynamic = ["version"]
 dependencies = [
     "joblib",
     "segments",
@@ -58,18 +61,6 @@ Documentation = "https://bootphon.github.io/phonemizer/"
 Repository = "https://github.com/bootphon/phonemizer"
 Issues = "https://github.com/bootphon/phonemizer"
 Changelog = "https://github.com/bootphon/phonemizer/blob/master/docs/source/changelog.rst"
-
-[tool.setuptools.packages]
-find = {}
-
-[tool.setuptools.package-data]
-phonemizer = [
-    "share/espeak/*",
-    "share/festival/*",
-    "share/segments/*"]
-
-[tool.setuptools.dynamic]
-version = {attr = "phonemizer.__version__"}
 
 [tool.pytest.ini_options]
 minversion = "6.0"

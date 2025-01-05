@@ -15,7 +15,7 @@
 """Multilingual text to phones converter"""
 
 from .phonemize import phonemize  # pylint: disable=unused-import
+import importlib.metadata
 
-
-__version__ = '3.3.0'
+__version__ = importlib.metadata.version(__name__)
 """Phonemizer version"""
