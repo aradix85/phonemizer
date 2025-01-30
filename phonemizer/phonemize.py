@@ -37,6 +37,7 @@ from phonemizer.separator import default_separator, Separator
 from phonemizer.utils import list2str, str2list
 
 Backend = Literal['espeak', 'espeak-mbrola', 'festival', 'segments']
+_PHONEMIZER_CACHE = {}
 
 
 def phonemize(  # pylint: disable=too-many-arguments
@@ -200,6 +201,22 @@ def phonemize(  # pylint: disable=too-many-arguments
         logger.warning('espeak-mbrola backend cannot preserve punctuation')
     if backend == 'espeak-mbrola' and separator.word:
         logger.warning('espeak-mbrola backend cannot preserve word separation')
+        
+    # cache handling: if this instance has been created in the past, everything should be A-OK
+    # todo: clean cache on __delete__
+    cache_key = (
+        backend,
+        language,
+        str(punctuation_marks),
+        preserve_punctuation,
+        with_stress,
+        tie,
+        language_switch,
+        words_mismatch
+    )
+    
+    if cache_key in _PHONEMIZER_CACHE:
+        return _phonemize(_PHONEMIZER_CACHE[cache_key], text, separator, strip, njobs, prepend_text, preserve_empty_lines)
 
     # initialize the phonemization backend
     if backend == 'espeak':
@@ -212,6 +229,8 @@ def phonemize(  # pylint: disable=too-many-arguments
             language_switch=language_switch,
             words_mismatch=words_mismatch,
             logger=logger)
+        # cache espeak-ng instance
+        _PHONEMIZER_CACHE[cache_key] = phonemizer
     elif backend == 'espeak-mbrola':
         phonemizer = BACKENDS[backend](
             language,
