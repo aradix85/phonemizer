@@ -41,13 +41,16 @@ requires-python = ">= 3.8"
 dynamic = ["version"]
 dependencies = [
     "joblib",
-    "segments",
     "attrs>=18.1",
     "dlinfo",
     "typing-extensions"]
 
 [project.optional-dependencies]
-test = ["pytest>=6.0", "pytest-cov", "coverage[toml]"]
+# the segments backend is optional: it pulls in a heavy dependency chain
+# (csvw, rdflib, jsonschema, babel, language-tags) that users of the espeak
+# and festival backends do not need. Install with "pip install phonemizer[segments]"
+segments = ["segments"]
+test = ["pytest>=6.0", "pytest-cov", "coverage[toml]", "segments"]
 doc = ["sphinx", "sphinx_rtd_theme"]
 
 [project.scripts]
