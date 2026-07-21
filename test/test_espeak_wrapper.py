@@ -138,3 +138,21 @@ def test_deletion():
     path = pathlib.Path(wrapper._espeak._tempdir)
     del wrapper
     assert not path.exists()
+
+
+@pytest.mark.skipif(
+    "PHONEMIZER_ESPEAK_LIBRARY" in os.environ,
+    reason="PHONEMIZER_ESPEAK_LIBRARY takes precedence over the lookup",
+)
+def test_library_found_without_configuration():
+    """The library must be found on a stock installation.
+
+    On Windows the official espeak-ng installer names the DLL
+    "libespeak-ng.dll". ctypes.util.find_library does not add a "lib" prefix
+    there (unlike Linux, where "espeak-ng" resolves to "libespeak-ng.so"), so
+    looking up only "espeak-ng"/"espeak" missed an installation that was
+    already on PATH.
+    """
+    library = EspeakWrapper.library()
+    assert library
+    assert pathlib.Path(str(library)).name.lower().startswith(("espeak", "libespeak"))
