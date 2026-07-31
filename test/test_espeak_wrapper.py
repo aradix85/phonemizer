@@ -24,7 +24,7 @@ import sys
 
 import pytest
 
-from phonemizer.backend import EspeakMbrolaBackend
+from phonemizer.backend import EspeakBackend, EspeakMbrolaBackend
 from phonemizer.backend.espeak.wrapper import EspeakWrapper
 
 
@@ -150,6 +150,9 @@ def test_mbrola_does_not_shadow_plain_voice(wrapper, language):
     entry then picks a voice needing the mbrola binary, making the language
     unusable even though a working voice exists further down the list.
     """
+    if not EspeakBackend.is_supported_language(language):
+        pytest.skip(f"{language} is not supported by this espeak version")
+
     wrapper.set_voice(language)
     assert wrapper.voice is not None
 
