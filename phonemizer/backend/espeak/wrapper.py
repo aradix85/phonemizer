@@ -145,7 +145,7 @@ class EspeakWrapper:
 
         """
         cls._ESPEAK_LIBRARY = library
-        
+
     @classmethod
     def set_data_path(cls, data_path: str):
         """Sets the path for the data to be used by the espeak backend.
@@ -223,20 +223,18 @@ class EspeakWrapper:
 
     @property
     def data_path(self):
-        """Returns the espeak library used as backend
+        """The espeak data directory as a pathlib.Path instance
 
-        The following precedence rule applies for library lookup:
+        The following precedence rule applies for data path lookup:
 
-        1. As specified by BaseEspeakBackend.set_library()
+        1. As specified by EspeakWrapper.set_data_path()
         2. Or as specified by the environment variable
-           PHONEMIZER_ESPEAK_LIBRARY
-        3. Or the default espeak library found on the system
+           PHONEMIZER_ESPEAK_DATA_PATH
+        3. Or the data directory of the espeak library in use
 
         Raises
         ------
-        RuntimeError if the espeak library cannot be found or if the
-          environment variable PHONEMIZER_ESPEAK_LIBRARY is set to a
-          non-readable file
+        RuntimeError if the specified data path is not a readable directory
 
         """
         if self._ESPEAK_DATA_PATH:
@@ -251,7 +249,7 @@ class EspeakWrapper:
                     f'PHONEMIZER_ESPEAK_DATA_PATH={data_path} '
                     f'is not a readable directory')
             self._data_path = data_path.resolve()
-        
+
         # Fetch path dynamically after initialize
         if self._data_path is None and hasattr(self, '_espeak'):
             self._fetch_version_and_path()
