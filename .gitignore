@@ -14,3 +14,4 @@ paper/*
 *.~undo-tree~
 
 docs/build
+.pixi
