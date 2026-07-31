@@ -8,6 +8,16 @@ Version numbers follow `semantic versioning <https://semver.org>`__.
 not yet released
 -----------------
 
+* **improvements**
+
+  * The espeak data directory can now be chosen with
+    ``EspeakWrapper.set_data_path()`` or the environment variable
+    ``PHONEMIZER_ESPEAK_DATA_PATH``. See `PR #213
+    <https://github.com/bootphon/phonemizer/pull/213>`__.
+  * ``phonemize()`` now reuses backend instances across calls instead of
+    building a new one every time. See `PR #212
+    <https://github.com/bootphon/phonemizer/pull/212>`__.
+
 * **bug fixes**
 
   * **Behaviour change:** a comma or period between two digits is no longer
@@ -16,14 +26,14 @@ not yet released
     spoken output. The previous behaviour can still be obtained by passing an
     explicit regex as ``punctuation_marks``. See `PR #216
     <https://github.com/bootphon/phonemizer/pull/216>`__.
-
+  * The espeak library is now also looked up under its ``lib``-prefixed names,
+    so a stock espeak-ng installation on Windows is found. See `PR #214
+    <https://github.com/bootphon/phonemizer/pull/214>`__.
   * Tests related to `festival` backend are now skipped when `festival` is not installed on the system.
-
   * Improved espeak library lookup on macos.
-
   * Unusable mbrola voices are filtered out on Windows.
-
-  * Make the segments backend an optional dependency (#211 <https://github.com/bootphon/phonemizer/pull/211>`__)
+  * Make the segments backend an optional dependency. See `PR #211
+    <https://github.com/bootphon/phonemizer/pull/211>`__.
 
 
 phonemizer-3.3.0
