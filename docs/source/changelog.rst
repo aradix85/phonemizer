@@ -10,6 +10,11 @@ not yet released
 
 * **bug fixes**
 
+  * Selecting a language by its code no longer resolves to an mbrola variant
+    that shadows the plain espeak voice, which made such languages unusable
+    when the mbrola binary is absent. See `PR #215
+    <https://github.com/bootphon/phonemizer/pull/215>`__.
+
   * Tests related to `festival` backend are now skipped when `festival` is not installed on the system.
 
   * Improved espeak library lookup on macos.
