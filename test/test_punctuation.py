@@ -222,7 +222,7 @@ def test_issue55(backend, marks, text, expected):
     'punctuation_marks, text, expected', [
         (';:,.!?¡—…"«»“”',
          'hello, ,world? ‡ 3,000, or 2.50. ¿hello?',
-         'həloʊ, ,wɜːld? θɹiː,ziəɹoʊziəɹoʊ ziəɹoʊ, ɔːɹ tuː.fɪfti. həloʊ? '),
+         'həloʊ, ,wɜːld? θɹiː θaʊzənd, ɔːɹ tuː pɔɪnt faɪv ziəɹoʊ. həloʊ? '),
         (re.compile(r"[^a-zA-ZÀ-ÖØ-öø-ÿ0-9'$@&+%\-=/\\]"),
          'hello, ,world? ‡ 3,000, or 2.50. ¿hello?',
          'həloʊ, ,wɜːld? ‡ θɹiː,ziəɹoʊziəɹoʊ ziəɹoʊ, ɔːɹ tuː.fɪfti. ¿həloʊ? '),
