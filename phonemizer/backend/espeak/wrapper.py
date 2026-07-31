@@ -174,7 +174,17 @@ class EspeakWrapper:
                 )
             return library.resolve()
 
-        library = _find_library("espeak-ng") or _find_library("espeak")
+        library = (
+            _find_library("espeak-ng")
+            or _find_library("espeak")
+            # The official espeak-ng Windows installer ships the DLL as
+            # "libespeak-ng.dll". ctypes.util.find_library does not add a
+            # "lib" prefix on Windows (unlike Linux, where it resolves
+            # "espeak-ng" to "libespeak-ng.so"), so the two names above miss
+            # a perfectly normal installation that is already on PATH.
+            or _find_library("libespeak-ng")
+            or _find_library("libespeak")
+        )
         if not library:  # pragma: nocover
             raise RuntimeError("failed to find espeak library")
         return library
