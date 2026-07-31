@@ -10,6 +10,13 @@ not yet released
 
 * **bug fixes**
 
+  * **Behaviour change:** a comma or period between two digits is no longer
+    treated as punctuation, so numbers such as ``19,99`` and ``3.14`` are kept
+    whole instead of being split into two numbers. Splitting them changed the
+    spoken output. The previous behaviour can still be obtained by passing an
+    explicit regex as ``punctuation_marks``. See `PR #216
+    <https://github.com/bootphon/phonemizer/pull/216>`__.
+
   * Tests related to `festival` backend are now skipped when `festival` is not installed on the system.
 
   * Improved espeak library lookup on macos.
