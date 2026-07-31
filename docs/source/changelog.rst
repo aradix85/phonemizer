@@ -8,6 +8,13 @@ Version numbers follow `semantic versioning <https://semver.org>`__.
 not yet released
 -----------------
 
+* **improvements**
+
+  * The espeak data directory can now be chosen with
+    ``EspeakWrapper.set_data_path()`` or the environment variable
+    ``PHONEMIZER_ESPEAK_DATA_PATH``. See `PR #213
+    <https://github.com/bootphon/phonemizer/pull/213>`__.
+
 * **bug fixes**
 
   * Tests related to `festival` backend are now skipped when `festival` is not installed on the system.
