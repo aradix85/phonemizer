@@ -26,6 +26,10 @@ not yet released
     spoken output. The previous behaviour can still be obtained by passing an
     explicit regex as ``punctuation_marks``. See `PR #216
     <https://github.com/bootphon/phonemizer/pull/216>`__.
+  * Selecting a language by its code no longer resolves to an mbrola variant
+    that shadows the plain espeak voice, which made such languages unusable
+    when the mbrola binary is absent. See `PR #215
+    <https://github.com/bootphon/phonemizer/pull/215>`__.
   * The espeak library is now also looked up under its ``lib``-prefixed names,
     so a stock espeak-ng installation on Windows is found. See `PR #214
     <https://github.com/bootphon/phonemizer/pull/214>`__.

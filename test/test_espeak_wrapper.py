@@ -24,7 +24,7 @@ import sys
 
 import pytest
 
-from phonemizer.backend import EspeakMbrolaBackend
+from phonemizer.backend import EspeakBackend, EspeakMbrolaBackend
 from phonemizer.backend.espeak.wrapper import EspeakWrapper
 
 
@@ -140,6 +140,27 @@ def test_deletion():
     assert not path.exists()
 
 
+@pytest.mark.parametrize("language", ["ar", "cs", "el", "hi", "ja", "ms"])
+def test_mbrola_does_not_shadow_plain_voice(wrapper, language):
+    """A language with mbrola variants must still resolve to a usable voice.
+
+    These languages list their mbrola variants under the same language code as
+    the plain espeak voice, and the mbrola ones can sort first (on Windows "ar"
+    lists mb/mb-ar1, mb/mb-ar2, sem/ar in that order). Selecting the first
+    entry then picks a voice needing the mbrola binary, making the language
+    unusable even though a working voice exists further down the list.
+    """
+    if not EspeakBackend.is_supported_language(language):
+        pytest.skip(f"{language} is not supported by this espeak version")
+
+    wrapper.set_voice(language)
+    assert wrapper.voice is not None
+
+    identifier = str(wrapper.voice.identifier).replace(os.sep, "/")
+    assert not identifier.startswith("mb/")
+    assert wrapper.text_to_phonemes("test").strip()
+    
+    
 @pytest.mark.skipif(
     "PHONEMIZER_ESPEAK_LIBRARY" in os.environ,
     reason="PHONEMIZER_ESPEAK_LIBRARY takes precedence over the lookup",

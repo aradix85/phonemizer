@@ -332,9 +332,20 @@ class EspeakWrapper:
         else:
             # this are espeak voices. Select the voice using it's attached
             # language code. Consider only the first voice of a given code as
-            # they are sorted by relevancy
+            # they are sorted by relevancy.
+            #
+            # Skip the mbrola variants here: they are listed under the same
+            # language code as the plain espeak voice and can sort first (on
+            # Windows "ar" lists mb/mb-ar1, mb/mb-ar2, sem/ar in that order),
+            # but they need the mbrola binary, which is not part of an espeak
+            # installation. Picking one when it is absent makes the language
+            # unusable even though a working voice exists further down the
+            # list. Mbrola voices remain reachable through the 'mb-*' codes
+            # handled above.
             available = {}
             for voice in self.available_voices():
+                if str(voice.identifier).replace("\\", "/").startswith("mb/"):
+                    continue
                 if voice.language not in available:
                     available[voice.language] = voice.identifier
 
