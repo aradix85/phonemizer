@@ -14,6 +14,9 @@ not yet released
     ``EspeakWrapper.set_data_path()`` or the environment variable
     ``PHONEMIZER_ESPEAK_DATA_PATH``. See `PR #213
     <https://github.com/bootphon/phonemizer/pull/213>`__.
+  * ``phonemize()`` now reuses backend instances across calls instead of
+    building a new one every time. See `PR #212
+    <https://github.com/bootphon/phonemizer/pull/212>`__.
 
 * **bug fixes**
 
